@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|${bName}의 재고 현황입니다.|"></title>
+</head>
+<body>
+<table border="1" style="border-collapse: collapse; width: 580px; height: 380px; text-align: center;">
+    <tr style="background-color: skyblue;"><th>카테고리</th><th>품목명</th><th>총 재고</th></tr>
+    <tr th:each="stock: ${stockList}">
+        <td>[[${stock.category}]]</td><td><strong>[[${stock.itemName}]]</strong></td>
+        <td style="color: red; font-style: italic; font-weight: bold;">[[${stock.pStock}]]</td>
+    </tr>
+</table>
+</body>
+</html>

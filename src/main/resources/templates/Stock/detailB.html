@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th ="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|${branchDetail.getBName()} 상세 조회|"></title>
+    <style>
+        .colored {
+            background-color: skyblue;
+        }
+    </style>
+</head>
+<body>
+<h2>대리점 정보</h2>
+<table border="1" style="border-collapse: collapse; width: 980px;">
+    <tr><th class="colored">점포명</th><td th:text="${branchDetail.bName}"></td></tr>
+    <tr><th class="colored">점장</th><td th:text="${branchDetail.getBAuth()}"></td></tr>
+    <tr><th class="colored">주소</th><td th:text="${branchDetail.getBAddress()}"></td></tr>
+    <tr><th class="colored">Tel.</th><td th:text="${branchDetail.getBPhone()}"></td></tr>
+</table><br/>
+<h2>재고 조회</h2>
+<select style="text-align: center; height: 25px;" id = "select">
+    <option value = "99999">---------선택-------</option>
+    <option value = "Manufacturer">제조사</option>
+    <option value = "itemName">제품명</option>
+<!--    <option value = "99999">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
+<!--    <option value = "그래픽 카드"> 그래픽 카드 </option>-->
+<!--    <option value = "CPU"> CPU </option>-->
+<!--    <option value = "메모리 카드"> 메모리 카드 </option>-->
+    <option value = "99999">---------------------</option>
+
+</select>
+<input type="text" placeholder="검색어를 입력하세요." style="width: 300px; height: 20px;" id = "searchInput">
+<button id = "search">검색</button>
+<div id = "result"></div>
+<!--branch(bNum, bName, bAddress, bPhone, bAuth)-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("search").addEventListener("click", function(event) {
+            let select = document.getElementById("select").value;
+            let searchInput = document.getElementById("searchInput").value;
+
+            if (select === '99999'){
+                event.preventDefault();
+                alert("카테고리를 선택해주세요.");
+            }
+            else if(searchInput === ''){
+                event.preventDefault();
+                alert("검색어를 입력해주세요.");
+            }
+            else {
+                $.ajax({
+                    method: 'POST',
+                    url: `/Stock/branch/search`,
+                    data: {"select": select, "searchInput": searchInput, "bNum": [[${bNum}]]},
+                    dataType: "json",
+                    success: function (map) {
+                        if (map.success) {
+                            let table = "<table border =1 style='border-collapse: collapse; width: 980px; margin: 20px auto;'>";
+                            table += "<tr style='background-color: skyblue;'><th>카테고리</th><th>제품명</th><th>제조사</th><th>입고일자</th><th>개수</th></tr>";
+                            for (let i = 0; i < map.list.length; i++) {
+                                let item = map.list[i];
+                                console.log(item);
+                                table += "<tr>";
+                                table += "<td>" + item.category + "</td>";
+                                table += "<td>" + item.itemName + "</td>";
+                                table += "<td>" + item.manufacturer + "</td>";
+                                table += "<td>" + item.icDate + "</td>";
+                                table += "<td>" + item.pstock + "</td>";
+                                table += "</tr>";
+                            }
+                            table += "</table>";
+                            $("#result").html(table);
+                        } else {
+                            alert("조회된 데이터가 없습니다.");
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

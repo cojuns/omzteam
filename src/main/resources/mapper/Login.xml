@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.class302.omzteam.mybatis.LoginDao">
+    <select id="selectCount" resultType="_int">
+        SELECT count(*)
+        FROM member
+    </select>
+
+
+    <insert id="register">
+        INSERT INTO member (mem_pw, mem_name, job)
+        VALUES (#{memberDto.mem_pw}, #{memberDto.mem_name}, #{memberDto.job})
+
+    </insert>
+    
+    
+</mapper>
+
+
+
+
+
+
