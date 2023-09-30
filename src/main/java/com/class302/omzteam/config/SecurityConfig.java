@@ -22,7 +22,7 @@ import java.util.Map;
 @Configuration
 @EnableWebSecurity
 @Log4j2
-public class SecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
@@ -31,23 +31,43 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsManager(){
-        UserDetails user = User.builder()
-                .username("user1")
-                .password(passwordEncoder().encode("1111"))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/login/loginForm").permitAll() // 로그인 페이지는 모두 접근 가능
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login/loginForm")
+                .usernameParameter("username") // 사용자 이름 파라미터명 설정
+                .passwordParameter("password") // 비밀번호 파라미터명 설정
+                .defaultSuccessUrl("/home") // 로그인 성공 후 이동할 페이지
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .permitAll()
+                .and()
+                .csrf().disable();
     }
 
-    @Bean // 기본 로그인페이지 제거
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .anyRequest().permitAll();
-        return http.build();
-    }
+//    @Bean
+//    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/login/joinForm", "/login/register").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login/loginForm")
+//                .defaultSuccessUrl("/main")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .permitAll();
+//        return http.build();
+//    }
 
 
 
