@@ -1,54 +1,66 @@
 package com.class302.omzteam.config;
 
+
+
+import com.class302.omzteam.service.MyUserDetailsService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
 
-import javax.sql.DataSource;
-import java.util.List;
-import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
 @Log4j2
-public class SecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+    @Autowired
+    private BCryptConfig bCryptConfig;
+
+    @Autowired
+    private MyUserDetailsService userDetailsService; // 사용자 정보를 제공하는 서비스
 
     @Bean
-    PasswordEncoder passwordEncoder(){
-
-        return new BCryptPasswordEncoder();
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsManager(){
-        UserDetails user = User.builder()
-                .username("user1")
-                .password(passwordEncoder().encode("1111"))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
-
-    @Bean // 기본 로그인페이지 제거
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
                 .authorizeRequests()
-                .anyRequest().permitAll();
-        return http.build();
+                .antMatchers("/login/loginForm","/login/joinForm").permitAll() // 해당 페이지는 모두 접근 가능
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login/loginForm")
+                .usernameParameter("username") // 사용자 이름 파라미터명 설정
+                .passwordParameter("password") // 비밀번호 파라미터명 설정
+                .defaultSuccessUrl("/") // 로그인 성공 후 이동할 페이지
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .permitAll()
+                .and()
+                .csrf().disable();
     }
 
+
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(userDetailsService) // 사용자 정보를 제공하는 서비스 설정
+                .passwordEncoder(bCryptConfig.passwordEncoder()); // 사용자 비밀번호 암호화 설정
+    }
 
 
 

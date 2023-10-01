@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
 
 <form action="/login/joinForm" method="post" th:object="${memberDto}" id="joinForm" class="loginForm">
+
+    <p>
+        <label>사번<br/>
+            <input type="text" th:field="*{mem_no}" readonly="readonly" style="border: none;" />
+        </label>
+    </p>
 
     <p>
         <label>비밀번호:<br/>
@@ -21,16 +30,63 @@
     </p>
 
     <p>
-        <label>부서:<br/>
-            <input type="text" th:field="*{job}" />
-        </label>
+        <label for="job">직위 선택:</label>
+        <select th:field="*{job}" id="job">
+            <option value="" th:selected="${memberDto.job == null}">---직위 선택---</option>
+            <option th:value="0">사원</option>
+            <option th:value="1">주임</option>
+            <option th:value="2">대리</option>
+            <option th:value="3">과장</option>
+            <option th:value="4">부장</option>
+        </select>
     </p>
 
-
-
+    <p>
+        <label>생일:</label>
+        <input type="text" name="birthdate" id="birthdate" th:field="*{birth}" />
+        <button id="calendar-button">달력</button>
+    </p>
 
     <input type="submit" value="등록" id="buttonS">
 </form>
+
+<script>
+    $(document).ready(function () {
+        // 한국어 로케일 설정
+        $.datepicker.setDefaults($.datepicker.regional['ko']);
+
+        var $birthdate = $("#birthdate");
+        var datePickerOptions = {
+            dateFormat: "yy-mm-dd", // 날짜 형식 설정
+            changeMonth: true,      // 월 변경 가능
+            changeYear: true,       // 연도 변경 가능
+            yearRange: "1900:+0",   // 연도 범위 설정 (1900년부터 현재년도까지)
+            showButtonPanel: true,  // '오늘' 및 '닫기' 버튼 표시
+            closeText: "닫기",      // '닫기' 버튼 텍스트 설정
+            currentText: "오늘",   // '오늘' 버튼 텍스트 설정
+            onSelect: function (dateText) {
+                // 날짜가 선택될 때 입력 필드에 값을 설정
+                $birthdate.val(dateText);
+            }
+        };
+
+        // 달력 버튼 클릭 시 달력 표시/숨김 토글
+        $("#calendar-button").click(function () {
+            if ($birthdate.datepicker("widget").is(":hidden")) {
+                $birthdate.datepicker("setDate", new Date());
+                $birthdate.datepicker("show");
+            } else {
+                $birthdate.datepicker("hide");
+            }
+        });
+
+        // input 상자를 직접 클릭하여 달력을 표시
+        $birthdate.click(function () {
+            $birthdate.datepicker(datePickerOptions);
+            $birthdate.datepicker("show");
+        });
+    });
+</script>
 
 </body>
 </html>

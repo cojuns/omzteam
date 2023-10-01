@@ -11,11 +11,19 @@
 
 
     <insert id="register">
-        INSERT INTO member (mem_pw, mem_name, job)
-        VALUES (#{memberDto.mem_pw}, #{memberDto.mem_name}, #{memberDto.job})
+        INSERT INTO member (mem_pw, mem_name, job, birth)
+        VALUES (#{memberDto.mem_pw}, #{memberDto.mem_name}, #{memberDto.job}, #{memberDto.birth})
 
     </insert>
-    
+
+    <select id="LoginId">
+    SELECT * FROM member WHERE mem_no = #{mem_no}
+
+    </select>
+
+    <select id="getNextNum">
+        SELECT MAX(mem_no)+1 FROM member
+    </select>
     
 </mapper>
 
