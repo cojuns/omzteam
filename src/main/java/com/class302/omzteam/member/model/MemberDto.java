@@ -3,6 +3,7 @@ package com.class302.omzteam.member.model;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -21,5 +22,12 @@ public class MemberDto {
     private String phone;
     private Long dept_no;
     private Date hiredate;// 로그인 할 때 ResultSetSpy 문제 됨 Date 타입으로 변경
+
+    public boolean is_initial_login = true;
+
+    public String getUsername() {
+        return mem_no.toString(); // 아이디는 mem_no로 설정
+    }
+
 
 }

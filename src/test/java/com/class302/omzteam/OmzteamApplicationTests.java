@@ -1,5 +1,6 @@
 package com.class302.omzteam;
 
+import com.class302.omzteam.member.model.MemberDto;
 import com.class302.omzteam.mybatis.LoginDao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ class OmzteamApplicationTests {
     @Test
     void getNextNum(){
 
-    Long Next = loginDao.getNextNum();
+    String Next = loginDao.getPw();
 
         System.out.println(Next);
 
