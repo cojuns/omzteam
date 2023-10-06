@@ -15,7 +15,7 @@ public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         if (authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             if (userDetails.isInitialLogin()) {
-                getRedirectStrategy().sendRedirect(request, response, "/login/changePassword");
+                getRedirectStrategy().sendRedirect(request, response, "/");
                 return;
             } else {
                 getRedirectStrategy().sendRedirect(request, response, "/"); // main 페이지로 리디렉트

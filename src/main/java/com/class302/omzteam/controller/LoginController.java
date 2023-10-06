@@ -77,6 +77,11 @@ public class LoginController {
         return "login/loginForm";
     }
 
+
+
+
+
+
 //    @PostMapping("/loginForm")
 //    public String loginProcess(@RequestParam Long mem_no, @RequestParam String mem_pw) {
 //        MemberDto member = loginDao.getLoginId(mem_no);

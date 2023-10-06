@@ -1,6 +1,7 @@
 package com.class302.omzteam.config;
 
 import com.class302.omzteam.service.CustomLoginSuccessHandler;
+import com.class302.omzteam.service.CustomLoginSuccessHandler;
 import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

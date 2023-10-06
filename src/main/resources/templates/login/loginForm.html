@@ -6,15 +6,27 @@
 </head>
 <body>
 <h1>Login</h1>
-<form action="/login/loginForm" method="post">
+<form action="/login/loginForm" method="post" id="loginForm">
     <label for="username">사번:</label>
     <input type="text" id="username" name="username" required><br><br>
 
     <label for="password">비밀번호:</label>
     <input type="password" id="password" name="password" required><br><br>
 
-    <input type="submit" value="로그인">
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <button type="button" id="loginButton" onclick="submitFormAndOpenPopup()">로그인</button>
 </form>
 </body>
+
+<script>
+    function openPopup() {
+        window.open('/login/changePassword', 'PopupWindow', 'width=600,height=400,scrollbars=yes,resizable=no');
+    }
+
+    function submitFormAndOpenPopup() {
+        // setTimeout을 사용하여 openPopup() 함수 호출을 약간 지연시킴
+        // setTimeout(openPopup, 1000);?
+        document.getElementById("loginForm").submit(); // Form을 직접 제출
+    }
+</script>
+
 </html>
