@@ -15,7 +15,7 @@ import java.util.Collections;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private LoginDao loginDao; // 사용자 정보를 데이터베이스에서 가져오는 DAO
+    private LoginDao loginDao;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -3,30 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+
+<style>
+
+    #messageDivId span {
+        color: red;
+        background-color: #f2dede;
+        padding: 10px;
+        border: 1px solid #ebccd1;
+        border-radius: 4px;
+        text-shadow: 1px 1px 1px grey;
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        0% {opacity: 1;}
+        50% {opacity: 0.5;}
+        100% {opacity: 1;}
+    }
+
+
+
+
+
+</style>
+
 </head>
 <body>
 <h1>Login</h1>
+
+<div id="messageDivId" class="errorText">
+    <span th:if="${param.error}">아이디나 비밀번호가 잘못되었습니다.</span>
+</div><br>
+
+
 <form action="/login/loginForm" method="post" id="loginForm">
+
     <label for="username">사번:</label>
-    <input type="text" id="username" name="username" required><br><br>
+    <input type="text" id="username" name="username" ><br><br>
+
 
     <label for="password">비밀번호:</label>
-    <input type="password" id="password" name="password" required><br><br>
+    <input type="password" id="password" name="password" ><br><br>
 
-    <button type="button" id="loginButton" onclick="submitFormAndOpenPopup()">로그인</button>
+
+    <button type="submit" id="loginButton">로그인</button>
 </form>
+
+
+
 </body>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function openPopup() {
-        window.open('/login/changePassword', 'PopupWindow', 'width=600,height=400,scrollbars=yes,resizable=no');
-    }
 
-    function submitFormAndOpenPopup() {
-        // setTimeout을 사용하여 openPopup() 함수 호출을 약간 지연시킴
-        // setTimeout(openPopup, 1000);?
-        document.getElementById("loginForm").submit(); // Form을 직접 제출
-    }
+    $("#loginForm").submit(function(e) {
+
+        if ($("#username").val().trim() === "") {
+            e.preventDefault(); // 폼 제출 막음
+            $("#messageDivId").html('<span>사번을 입력하세요.</span>');
+            return;
+        }
+
+
+        if ($("#password").val().trim() === "") {
+            e.preventDefault();
+            $("#messageDivId").html('<span>비밀번호를 입력하세요.</span>');
+            return;
+        }
+
+
+    });
+
+
 </script>
+
 
 </html>

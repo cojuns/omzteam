@@ -47,8 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login/loginForm") // 로그인 페이지 URL 지정
+                .failureUrl("/login/loginForm?error=true")
                 .successHandler(new CustomLoginSuccessHandler())
+
                 .loginProcessingUrl("/login/loginForm")
+
+
                 .permitAll()
 
                 .and()

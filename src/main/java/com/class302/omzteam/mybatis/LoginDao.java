@@ -9,6 +9,8 @@ public interface LoginDao {
 
     MemberDto getLoginId(@Param("mem_no") Long mem_no);
 
+    MemberDto getLoginPw(@Param("mem_pw") String mem_pw);
+
     Long getNextNum();
 
     String getPw();
@@ -16,6 +18,8 @@ public interface LoginDao {
     void updatePassword(@Param("mem_no") Long mem_no,
                         @Param("mem_pw") String mem_pw,
                         @Param("is_initial_login") boolean isInitialLogin);
+
+    String getName(@Param("mem_name") String mem_name);
 
 
 

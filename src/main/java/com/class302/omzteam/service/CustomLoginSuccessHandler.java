@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,11 +15,14 @@ public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         if (authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+
             if (userDetails.isInitialLogin()) {
-                getRedirectStrategy().sendRedirect(request, response, "/");
+                request.getSession().setAttribute("showChangePasswordPopup", true);
+                getRedirectStrategy().sendRedirect(request, response, "/main");
                 return;
             } else {
-                getRedirectStrategy().sendRedirect(request, response, "/"); // main 페이지로 리디렉트
+                getRedirectStrategy().sendRedirect(request, response, "/main"); // main 페이지로 리디렉트
                 return;
             }
         }
