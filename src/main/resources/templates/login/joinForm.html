@@ -6,36 +6,20 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+    <link href="css/joinForm.css" rel="stylesheet">
 
     <style>
-
-        select.box {
-            width: 20%;
-            height: 30px;
-            box-sizing: border-box;
-            margin-left: 5px;
-            padding: 5px 0 5px 10px;
-            border-radius: 4px;
-            border: 1px solid #d9d6d6;
-            color: #383838;
-            background-color: #ffffff;
-            font-family: 'Montserrat', 'Pretendard', sans-serif;
-        }
-
-        option {
-            font-size: 16px;
-        }
-
-        .info .box#domain-list option {
-            font-size: 14px;
-            background-color: #ffffff;
+        .errorText {
+            color: red;
+            font-size: 15px;
         }
 
     </style>
 
+
 </head>
 <body>
+
 
 
 
@@ -53,32 +37,35 @@
     </p>
 
     <p>
-        <label>이름:<br/>
-            <input type="text" th:field="*{mem_name}" />
+        <label>이름<br/>
+            <input type="text" th:field="*{mem_name}" id="name" placeholder="홍길동" />
+            <label id="messageDivId" class="errorText" type="text"></label>
         </label>
+
     </p>
 
     <p>
-        <label for="job">직위 선택:</label>
-        <select th:field="*{job}" id="job">
-            <option value="" th:selected="${memberDto.job == null}">---직위 선택---</option>
-            <option th:value="1">대표</option>
-            <option th:value="2">이사</option>
-            <option th:value="3">부장</option>
-            <option th:value="4">과장</option>
-            <option th:value="5">대리</option>
-            <option th:value="6">사원</option>
-        </select>
+        <label>핸드폰 번호<br></label>
+        <input type="hidden" name="phone" id="phone" th:field="*{phone}" />
+        <select class="hp" id="hp-list">
+            <option value="010">010</option>
+            <option value="011">011</option>
+            <option value="016">016</option>
+            <option value="019">019</option>
+            <option value="미등록">미등록</option>
+        </select>-
+        <input class="hp" id="hp1" type="text" />-
+        <input class="hp" id="hp2" type="text" />
+        <label id="messageeHp" class="errorText" type="text"></label>
     </p>
 
-    <p>
-        <label>생일:</label>
-        <input type="text" name="birth" id="birthdate" th:field="*{birth}" autocomplete="off" />
-        <button id="calendar-button" type="button">달력</button>
-    </p>
+
+
+
+
 
     <p>
-        <label>이메일:</label>
+        <label>이메일<br></label>
         <input type="hidden" name="full_email" id="full-email" th:field="*{email}" />
         <input class="box" id="domain" type="text" />@
         <input class="box" id="domain-txt" type="text" />
@@ -90,18 +77,21 @@
             <option value="nate.com">nate.com</option>
             <option value="kakao.com">kakao.com</option>
         </select>
+        <label id="messageeEmail" class="errorText" type="text"></label>
     </p>
 
 
     <p>
-        <label>핸드폰 번호:</label>
-            <input type="text" name="phone" id="phone" th:field="*{phone}" />
+        <label>생일<br></label>
+        <input type="text" name="birth" id="birthdate" th:field="*{birth}" autocomplete="off" placeholder="생일을 선택해 주세요." />
+        <button id="calendar-button" type="button">달력</button>
+        <label id="messageDivbirthdate" class="errorText" type="text"></label>
     </p>
 
 
 
     <p>
-        <label for="dept_no">부서 선택:</label>
+        <label for="dept_no">부서 선택<br></label>
         <select th:field="*{dept_no}" id="dept_no">
             <option value="" th:selected="${memberDto.job == null}">---부서 선택---</option>
             <option th:value="1">인사팀</option>
@@ -112,7 +102,24 @@
             <option th:value="12">대구영업부</option>
             <option th:value="13">경기도 영업부</option>
         </select>
+        <label id="messageDivdept_no" class="errorText" type="text"></label>
     </p>
+
+    <p>
+        <label for="job">직위 선택<br></label>
+        <select th:field="*{job}" id="job">
+            <option value="" th:selected="${memberDto.job == null}">---직위 선택---</option>
+            <option th:value="1">대표</option>
+            <option th:value="2">이사</option>
+            <option th:value="3">부장</option>
+            <option th:value="4">과장</option>
+            <option th:value="5">대리</option>
+            <option th:value="6">사원</option>
+        </select>
+        <label id="messageDivjob" class="errorText" type="text"></label>
+    </p>
+
+
 
 
     <input type="submit" value="등록" id="buttonS">
@@ -120,6 +127,178 @@
 
 
 <script>
+
+    // 한글 입력 x
+    document.getElementById("domain").addEventListener("input", function() {
+
+        var koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+
+
+        if (koreanRegex.test(this.value)) {
+            alert("한글 입력 불가");
+            this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, "");
+        } else {
+            this.value = this.value.replace(/[^a-zA-Z0-9@.]/g, "");
+        }
+    });
+
+    document.getElementById("domain-txt").addEventListener("input", function() {
+
+        var koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+
+
+        if (koreanRegex.test(this.value)) {
+            alert("한글 입력 불가");
+            this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, "");
+        } else {
+            this.value = this.value.replace(/[^a-zA-Z0-9@.]/g, "");
+        }
+    });
+
+
+    document.getElementById("hp1").addEventListener("input", function() {
+
+        if (/\D/.test(this.value)) {
+            alert("숫자만 입력 가능합니다.");
+            this.value = this.value.replace(/\D/g, "");
+        }
+        // 4글자가 입력되면 다음 입력 필드로 초점 이동
+        if (this.value.length === 4) {
+            document.getElementById("hp2").focus();
+        }
+
+        if (this.value.length > 4) {
+            this.value = this.value.substring(0, 4);
+        }
+
+
+    });
+
+
+    document.getElementById("hp2").addEventListener("input", function() {
+
+        if (/\D/.test(this.value)) {
+            alert("숫자만 입력 가능합니다.");
+            this.value = this.value.replace(/\D/g, "");
+        }
+
+        if (this.value.length > 4) {
+            this.value = this.value.substring(0, 4);
+        }
+
+
+
+    });
+
+    // 이름
+    document.getElementById("name").addEventListener("input", function() {
+
+        // 영문과 한글만 입력 가능하게 함
+        if (/[^a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]/.test(this.value)) {
+            alert("영문 또는 한글만 입력 가능합니다.");
+            this.value = this.value.replace(/[^a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]/g, "");
+        }
+
+        if (this.value.length > 10) {
+            this.value = this.value.substring(0, 10);
+        }
+
+    });
+
+
+
+
+
+
+    $("#joinForm").submit(function(e) {
+
+
+
+
+
+
+        if ($("#name").val().trim() === "") {
+            e.preventDefault(); // 폼 제출 막음
+            $("#messageDivId").html('<span>이름을 입력하세요.</span>');
+            return;
+        }else{
+            $("#messageDivId").html("");
+        }
+
+        var phonePrefix = $("#hp-list").val().trim();
+        var phonePart1 = $("#hp1").val().trim();
+        var phonePart2 = $("#hp2").val().trim();
+
+        if (!phonePrefix || !phonePart1 || !phonePart2) {
+            e.preventDefault();
+            $("#messageeHp").html('<span>핸드폰 번호를 모두 입력하세요.</span>');
+            return;
+        } else {
+            var phone = phonePrefix + "-" + phonePart1 + "-" + phonePart2;
+            $("#phone").val(phone);
+            $("#messageeHp").html("");
+        }
+
+
+
+        if ($("#domain").val().trim() === "") {
+            e.preventDefault();
+            $("#messageeEmail").html('<span>이메일을 입력하세요.</span>');
+            return;
+        }else {
+            $("#messageeEmail").html("");
+        }
+
+        if ($("#domain-txt").val().trim() === "") {
+            e.preventDefault();
+            $("#messageeEmail").html('<span>이메일을 선택하세요.</span>');
+            return;
+        }else {
+            $("#messageeEmail").html("");
+        }
+
+
+        if ($("#birthdate").val().trim() === "") {
+            e.preventDefault();
+            $("#messageDivbirthdate").html('<span>생일을 선택하세요.</span>');
+            return;
+        }else {
+            $("#messageDivbirthdate").html("");
+        }
+
+
+
+        if ($("#dept_no").val().trim() === "") {
+            e.preventDefault();
+            $("#messageDivdept_no").html('<span>부서를 선택하세요.</span>');
+            return;
+        }else {
+            $("#messageDivdept_no").html("");
+        }
+
+
+        if ($("#job").val().trim() === "") {
+            e.preventDefault();
+            $("#messageDivjob").html('<span>직위를 선택하세요.</span>');
+            return;
+        }else {
+            $("#messageDivjob").html("");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    });
 
     // 달력
     $(document).ready(function () {
@@ -222,9 +401,12 @@
     });
 
 
-</script>
+
+
 
 </script>
+
+
 
 </body>
 </html>

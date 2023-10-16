@@ -97,6 +97,7 @@ main
     <div class="modal-content">
         <span class="close" onclick="closeModal()"></span>
         <h2>비밀번호를 변경 해주세요</h2>
+        <h5>영문, 숫자, 특수문자를 모두 포함해야 합니다.</h5>
         <form action="/login/changePassword" method="post">
             <div class="form-group">
                 <input type="password" name="newPassword" placeholder="새 비밀번호" />
@@ -116,9 +117,16 @@ main
 <p>이름, <span th:text="${Mem_name}"></span></p>
 
 <script th:inline="javascript">
+
+
+
+
+
     let showChangePasswordPopup = [[${showChangePasswordPopup}]];
 
     const userId = [[${username}]];
+
+
 
     window.onload = function() {
 
@@ -150,10 +158,27 @@ main
         document.getElementById('myModal').style.display = 'none';
     }
 
+    function isValidPassword(password) {
+        // 대문자, 소문자, 숫자, 특수문자가 모두 포함되어 있어야 합니다.
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/;
+        return regex.test(password);
+    }
+
+
     const form = document.querySelector("form");
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+
+        const newPassword = form.querySelector('[name="newPassword"]').value;
+
+        if (!isValidPassword(newPassword)) {
+            alert('비밀번호는 영문자, 숫자, 특수문자를 모두 포함해야 합니다.');
+            return;
+        }
+
+
 
         const formData = new FormData(form);
 

@@ -104,7 +104,7 @@ public class LoginController {
 
     @GetMapping("/login/changePassword")
     public String showChangePasswordForm(Model model, HttpSession session) {
-        // 세션에서 showChangePasswordPopup 값을 가져와서 JavaScript 변수에 할당
+
         boolean showChangePasswordPopup = session.getAttribute("showChangePasswordPopup") != null && (boolean) session.getAttribute("showChangePasswordPopup");
 
 
