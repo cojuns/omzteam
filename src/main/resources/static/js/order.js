@@ -61,7 +61,7 @@ function placeOrder() {
     const quantityInput = document.getElementById("quantity");
     const quantity = parseInt(quantityInput.value);
     $.ajax({
-        url: "/Purchase/addOrder", // 컨트롤러 엔드포인트 URL
+        url: "/purchase/addOrder", // 컨트롤러 엔드포인트 URL
         type: "Get", // POST 요청
         data: {
             itemNum: itemNum,
@@ -89,7 +89,7 @@ $(document).ready(function () {
         // Ajax 요청을 보내는 부분
         $.ajax({
             type: 'POST',  // HTTP 요청 메소드 (GET 또는 POST)
-            url: '/Purchase/Select',  // 컨트롤러 URL을 여기에 입력하세요
+            url: '/purchase/select',  // 컨트롤러 URL을 여기에 입력하세요
             data: { itemNum: itemNum},  // 전송할 데이터
             success: function (data) {
                 // Ajax 요청이 성공했을 때 실행할 코드
@@ -114,7 +114,7 @@ $(document).ready(function () {
     });
     $.ajax({
         type: 'GET',
-        url: '/Purchase/exchange',
+        url: '/purchase/exchange',
         success: function (data){
             $("#exchangeRate").text(data);
 

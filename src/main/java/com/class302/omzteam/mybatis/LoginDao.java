@@ -21,6 +21,7 @@ public interface LoginDao {
 
     String getName(@Param("mem_name") String mem_name);
 
+    Integer getDeptno(Long mem_no);
 
 
 //    void save(MemberDto memberDto);

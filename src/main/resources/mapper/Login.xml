@@ -40,6 +40,9 @@
         WHERE mem_no = #{mem_no}
     </update>
 
+    <select id="getDeptno">
+        SELECT dept_no FROM member WHERE mem_no = #{mem_no}
+    </select>
 
     
 </mapper>

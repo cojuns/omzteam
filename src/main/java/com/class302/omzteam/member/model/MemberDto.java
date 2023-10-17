@@ -22,6 +22,7 @@ public class MemberDto {
     private String phone;
     private Long dept_no;
     private Date hiredate;// 로그인 할 때 ResultSetSpy 문제 됨 Date 타입으로 변경
+    private String dept;
 
     public boolean is_initial_login = true;
 

@@ -9,10 +9,156 @@
     <link href="css/joinForm.css" rel="stylesheet">
 
     <style>
+
+
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #4e73df;
+            padding: 50px;
+
+
+        }
+
+        .loginForm {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+
+
+
+
+
+
+        input[type="text"]:focus, input[type="password"]:focus, select:focus {
+            border: 1px solid #007BFF;
+            outline: none;
+        }
+
+        .buttonS {
+            background-color: #4e73df;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .buttonS:hover {
+            background-color: #0056b3;
+        }
+
+        #calendar-button {
+            background-color: #4e73df;
+            color: #ffffff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            right: 0;
+            top: 0;
+        }
+
+        #calendar-button:hover {
+            background-color: #0056b3;
+        }
+
         .errorText {
+            display: none;  /* 초기에는 오류 메시지를 숨김 */
             color: red;
             font-size: 15px;
+            margin-top: 5px;
         }
+
+
+
+
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        label.errorText {
+            display: inline;  /* 원래의 block 대신 inline을 사용 */
+            font-weight: normal;  /* bold 대신 normal을 사용 */
+            margin-bottom: 0;  /* margin을 제거 */
+        }
+
+        input[type="text"]:focus, input[type="password"] {
+            width: 30%;
+            padding: 10px;
+            box-sizing: border-box; /* padding과 border가 너비에 포함되게 함 */
+            font-size: 16px;
+            border-radius: 8px; /* 둥근 모서리 */
+            background-color: #f5f5f5; /* light gray background */
+            border: 1px solid #ccc;
+            transition: background-color 0.3s;
+        }
+
+        input[type="text"], input[type="password"], select {
+            width: 30%;
+            padding: 7px;
+            box-sizing: border-box; /* padding과 border가 너비에 포함되게 함 */
+            font-size: 16px;
+            border-radius: 8px; /* 둥근 모서리 */
+            background-color: #f5f5f5; /* light gray background */
+            border: 1px solid #ccc;
+            transition: background-color 0.3s;
+        }
+
+        /* 포커스되었을 때의 스타일 */
+        input[type="text"]:focus {
+            background-color: #e0e0e0; /* slightly darker gray when focused */
+            outline: none; /* 기본적인 브라우저 포커스 스타일을 제거 */
+        }
+
+        /* readonly 속성이 있는 경우 스타일 */
+        input[type="text"][readonly] {
+            background-color: #4e73df; /* darker gray for readonly inputs */
+            cursor: not-allowed; /* 'not-allowed' cursor to indicate no interaction */
+            color: #ffffff;
+            width: 40%;
+            text-align: center;
+        }
+
+
+        .form-row {
+            display: flex; /* Flexbox를 사용 */
+            justify-content: space-between; /* 각 <p> 태그 사이에 균등한 간격을 줍니다 */
+            align-items: flex-start; /* 각 항목을 상단으로 정렬합니다 */
+            margin-bottom: 20px;
+        }
+
+        p {
+            flex: 1; /* 각 <p> 태그가 동일한 너비를 가지도록 합니다 */
+            margin-right: 20px; /* 각 <p> 태그 사이의 간격을 조정합니다 */
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        p:last-child {
+            margin-right: 0; /* 마지막 <p> 태그는 오른쪽 margin을 제거합니다 */
+        }
+
+        label, select {
+            width: 100%; /* 폭을 최대로 설정하여 화면 전체 너비를 사용합니다 */
+            margin-bottom: 10px; /* 요소 사이의 간격을 설정합니다 */
+        }
+
+
+
+
+
 
     </style>
 
@@ -24,6 +170,8 @@
 
 
 <form action="/login/joinForm" method="post" th:object="${memberDto}" id="joinForm" class="loginForm">
+
+   <div class="form-row">
     <p>
         <label>사용 가능한 사번<br/>
             <input type="text" th:field="*{mem_no}" readonly="readonly" style="border: none;" />
@@ -36,6 +184,7 @@
         </label>
     </p>
 
+       </div>
     <p>
         <label>이름<br/>
             <input type="text" th:field="*{mem_name}" id="name" placeholder="홍길동" />
@@ -47,15 +196,15 @@
     <p>
         <label>핸드폰 번호<br></label>
         <input type="hidden" name="phone" id="phone" th:field="*{phone}" />
-        <select class="hp" id="hp-list">
+        <select class="hp" id="hp-list" style="width: 30%">
             <option value="010">010</option>
             <option value="011">011</option>
             <option value="016">016</option>
             <option value="019">019</option>
             <option value="미등록">미등록</option>
         </select>-
-        <input class="hp" id="hp1" type="text" />-
-        <input class="hp" id="hp2" type="text" />
+        <input class="hp" id="hp1" type="text" placeholder="1234"/>-
+        <input class="hp" id="hp2" type="text" placeholder="5678"/><br>
         <label id="messageeHp" class="errorText" type="text"></label>
     </p>
 
@@ -67,9 +216,9 @@
     <p>
         <label>이메일<br></label>
         <input type="hidden" name="full_email" id="full-email" th:field="*{email}" />
-        <input class="box" id="domain" type="text" />@
-        <input class="box" id="domain-txt" type="text" />
-        <select class="box" id="domain-list">
+        <input class="box" id="domain" type="text" placeholder="Email"/>@
+        <input class="box" id="domain-txt" type="text" placeholder="직접 입력" />
+        <select class="box" id="domain-list" style="width: 30%">
             <option value="type">직접 입력</option>
             <option value="naver.com">naver.com</option>
             <option value="google.com">google.com</option>
@@ -81,15 +230,16 @@
     </p>
 
 
+
     <p>
         <label>생일<br></label>
-        <input type="text" name="birth" id="birthdate" th:field="*{birth}" autocomplete="off" placeholder="생일을 선택해 주세요." />
+        <input type="text" name="birth" id="birthdate" th:field="*{birth}" autocomplete="off" placeholder="생일을 선택해 주세요." style="width: 45%" />
         <button id="calendar-button" type="button">달력</button>
         <label id="messageDivbirthdate" class="errorText" type="text"></label>
     </p>
 
 
-
+    <div class="form-row">
     <p>
         <label for="dept_no">부서 선택<br></label>
         <select th:field="*{dept_no}" id="dept_no">
@@ -119,14 +269,22 @@
         <label id="messageDivjob" class="errorText" type="text"></label>
     </p>
 
+    </div>
 
 
+    <input type="submit" value="등록" class="buttonS" id="submitButton">
+    <button id="cancelButton" class="buttonS">취소</button>
 
-    <input type="submit" value="등록" id="buttonS">
 </form>
 
 
 <script>
+
+    document.getElementById("cancelButton").addEventListener("click", function() {
+        window.close();
+    });
+
+
 
     // 한글 입력 x
     document.getElementById("domain").addEventListener("input", function() {
@@ -212,9 +370,7 @@
 
     $("#joinForm").submit(function(e) {
 
-
-
-
+        e.preventDefault();
 
 
         if ($("#name").val().trim() === "") {
@@ -285,20 +441,30 @@
             $("#messageDivjob").html("");
         }
 
+        var formData = $(this).serialize();
 
 
-
-
-
-
-
-
-
-
-
-
+        $.ajax({
+            url: $(this).attr('/login/joinForm'),  // 'action' 속성에 지정된 URL로 데이터를 전송합니다.
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                // 서버에서 성공적인 응답을 받았을 때 윈도우를 닫습니다.
+                alert("사원 등록 완료")
+                window.close();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 서버에서 오류 응답을 받았을 때 오류 메시지를 출력하거나 다른 조치를 취합니다.
+                alert("Error occurred: " + textStatus);
+            }
+        });
 
     });
+
+
+
+
+
 
     // 달력
     $(document).ready(function () {
@@ -355,9 +521,9 @@
     $(document).ready(function () {
 
 
-       // 이메일 결합
+        // 이메일 결합
         $("#joinForm").submit(function(event) {
-            // 두 개의 이메일 입력값을 결합
+
             var email = $("#domain").val() + "@" + $("#domain-txt").val();
 
 

@@ -45,7 +45,7 @@ public class PurchaseController {
         System.out.println(addOrder);
         return purchaseAdd.puchaseAdd(addOrder);
     }
-    @PostMapping("/Select")
+    @PostMapping("/select")
     @ResponseBody
     public ScrapedData selectOption(int itemNum) throws IOException {
 

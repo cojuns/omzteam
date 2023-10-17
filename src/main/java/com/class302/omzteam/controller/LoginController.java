@@ -2,8 +2,9 @@ package com.class302.omzteam.controller;
 
 import com.class302.omzteam.member.model.MemberDto;
 import com.class302.omzteam.mybatis.LoginDao;
-import com.class302.omzteam.service.CustomUserDetails;
+import com.class302.omzteam.login.service.CustomUserDetails;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,7 +76,7 @@ public class LoginController {
     }
 
 
-    @GetMapping("/main")
+    @GetMapping("/")
     public String main(Model model, HttpSession session, HttpServletRequest request) {
         // 현재 로그인한 사용자의 Authentication 객체 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -86,18 +85,22 @@ public class LoginController {
         String username = authentication.getName();
 
 
+
+        Long mem_no = Long.parseLong(username);
+        Integer dept_no = loginDao.getDeptno(mem_no);
+
         Boolean showChangePasswordPopup = (Boolean) session.getAttribute("showChangePasswordPopup");
-
-
         if (showChangePasswordPopup == null || !showChangePasswordPopup) {
             showChangePasswordPopup = false;
         }
 
         model.addAttribute("showChangePasswordPopup", showChangePasswordPopup);
         model.addAttribute("username", username);
+        model.addAttribute("deptno", dept_no);
 
-        return "main";
+        return "index";
     }
+
 
 
 
@@ -156,7 +159,7 @@ public class LoginController {
         session.setAttribute("showChangePasswordPopup", false);
 
         response.put("success", true);
-        response.put("redirectUrl", "/main");  // 클라이언트에게 리다이렉트할 URL 전송
+        response.put("redirectUrl", "/");  // 클라이언트에게 리다이렉트할 URL 전송
 
         return response;
     }
