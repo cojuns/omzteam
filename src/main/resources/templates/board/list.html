@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시글 목록</title>
+</head>
+<body>
+<h1>게시글 목록</h1>
+<div>
+    <a th:href="@{/posts/create}">새 게시글 작성</a>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성일</th>
+        <th>조회수</th>
+        <th>기능</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${posts}">
+        <td th:text="${post.num}">1</td>
+        <td><a th:href="@{/posts/{id}(id=${post.post_no})}" th:text="${post.title}">게시글 제목</a></td>
+        <td th:text="${#dates.format(post.date_created, 'yyyy-MM-dd HH:mm')}">작성일</td>
+        <td th:text="${post.hits}">조회수</td>
+        <td>
+            <a th:href="@{/posts/edit/{id}(id=${post.post_no})}">수정</a>
+            <a th:href="@{/posts/{id}(id=${post.post_no})}" th:method="delete">삭제</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

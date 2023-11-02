@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.class302.omzteam.mybatis.PostMapper">
+
+    <select id="selectAllPosts" resultType="com.class302.omzteam.board.model.Post">
+        SELECT * FROM post
+    </select>
+
+    <!-- 게시글 조회 -->
+    <select id="selectPost" parameterType="int" resultType="com.class302.omzteam.board.model.Post">
+        SELECT * FROM post WHERE post_no = #{post_no}
+    </select>
+
+    <!-- 게시글 추가 -->
+    <insert id="insertPost" parameterType="com.class302.omzteam.board.model.Post">
+        INSERT INTO post (board_no, num, content, date_created, title, hits)
+        VALUES (#{board_no}, #{num}, #{content}, NOW(), #{title}, 0)
+    </insert>
+
+    <!-- 게시글 수정 -->
+    <update id="updatePost" parameterType="com.class302.omzteam.board.model.Post">
+        UPDATE post SET
+                        board_no = #{board_no},
+                        num = #{num},
+                        content = #{content},
+                        date_created = NOW(),
+                        title = #{title},
+                        hits = #{hits}
+        WHERE post_no = #{post_no}
+    </update>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deletePost" parameterType="int">
+        DELETE FROM post WHERE post_no = #{post_no}
+    </delete>
+
+    
+    
+</mapper>
+
+
+
+
+
+
