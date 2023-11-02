@@ -1,11 +1,11 @@
 package com.class302.omzteam.controller;
 
+import com.class302.omzteam.mybatis.BranchDao;
+import com.class302.omzteam.mybatis.WarehouseDao;
 import com.class302.omzteam.wareBranch.dto.Branch;
 import com.class302.omzteam.wareBranch.dto.StockB;
 import com.class302.omzteam.wareBranch.dto.StockW;
 import com.class302.omzteam.wareBranch.dto.Warehouse;
-import com.class302.omzteam.mybatis.BranchDao;
-import com.class302.omzteam.mybatis.WarehouseDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -127,7 +127,7 @@ public class StockController {
         return map;
     }
 
-    @RequestMapping( value = "/stockDetail/Branch/{bNum}/{itemNum}", method = RequestMethod.GET)
+    @RequestMapping( value = "branch/stockDetail/{bNum}/{itemNum}", method = RequestMethod.GET)
     public ModelAndView stockDetailB(@PathVariable("bNum") int bNum, @PathVariable("itemNum") int itemNum, ModelAndView mav){
         mav.setViewName("Stock/Branch/stockDetail");
         mav.addObject("stockDetail", branchDao.stockDetail(bNum, itemNum));
@@ -136,7 +136,7 @@ public class StockController {
         return mav;
     }
 
-    @RequestMapping( value = "/stockDetail/Warehouse/{wNum}/{itemNum}", method = RequestMethod.GET)
+    @RequestMapping( value = "warehouse/stockDetail/{wNum}/{itemNum}", method = RequestMethod.GET)
     public ModelAndView stockDetailW(@PathVariable("wNum") int wNum, @PathVariable("itemNum") int itemNum, ModelAndView mav){
         mav.setViewName("Stock/Warehouse/stockDetail");
         mav.addObject("stockDetail", warehouseDao.stockDetail(wNum, itemNum));

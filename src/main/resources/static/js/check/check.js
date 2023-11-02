@@ -1,82 +1,62 @@
-let msg = "${msg}";
-if (msg==="CHK_ERR") alert(`출근에 실패하였습니다.`)
 
-let checkInBtn = document.querySelector("#checkInBtn");
-const no = 111;
-const isLate = 0;
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: function(info, successCallback, failureCallback) {
+            // 서버에서 이벤트 데이터를 가져오는 AJAX 요청
+            $.ajax({
+                url: '/calendarEvent/check', // 이벤트 데이터를 가져올 엔드포인트 URL
+                type: 'GET', // HTTP GET 요청 사용
+                success: function(data) {
 
-checkInBtn.addEventListener("click", function () {
-    const url = "/check/in"
-    // fetch를 사용하여 POST 요청 보내기
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // JSON 형식으로 데이터를 전송하는 것을 명시
+                    var checkIn = data
+                        .filter(function(item) {
+                            return item.checkin_time !== null;
+                        })
+                        .map(function(item) {
+                            return {
+                                title: item.checkin_time,
+                                color: 'blue',
+                                start: item.date
+                            };
+                        });
+                        console.log(checkIn)
+                    var checkOut = data
+                        .filter(function(item) {
+                            return item.checkout_time !== null;
+                        })
+                        .map(function(item) {
+                            return {
+                                title: item.checkout_time,
+                                color: 'red',
+                                start: item.date
+                            };
+                        });
+
+// 데이터를 성공적으로 가져온 경우, checkIn과 checkOut을 합쳐서 한 번만 successCallback에 전달
+                    var combinedData = checkIn.concat(checkOut);
+                    // console.log(combinedData);
+                    successCallback(combinedData);
+                },
+                error: function() {
+                    // 데이터 가져오기에 실패한 경우
+                    failureCallback();
+                    alert('이벤트 데이터를 가져오는 중에 오류가 발생했습니다.');
+                }
+            });
         },
-        body: JSON.stringify({ // 객체를 JSON 문자열로 변환하여 전송
-            no: no,
-            isLate: isLate
-        })
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json(); // JSON 형식으로 응답 데이터를 파싱
-            } else {
-                throw new Error('응답이 실패하였습니다.');
-            }
-        })
-        .then(data => {
-            // 응답에서 받은 시간 데이터를 사용하여 input 태그에 값을 설정
-            const checkInput  = document.querySelector("#checkIn");
-            checkInput.value = data.time; // data.time에 실제 시간 데이터가 들어가야 합니다.
-            console.log(checkInput.value)
+        dateClick: function (info){
 
-            // 여기에 다른 원하는 작업을 수행할 수 있습니다.
+            openCalendarModal(info.dateStr);
+            // $("#calendarModal").modal("show");
 
-            // 예: 알림 메시지 표시
-            alert('출근되었습니다.');
-            // 예: 페이지 새로고침
-            // window.location.reload();
-        })
-        .catch(error => {
-            console.error('에러 발생:', error);
-        });
-});
-
-checkInBtn.addEventListener("click", function () {
-    const url = "/check/in"
-    // fetch를 사용하여 POST 요청 보내기
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // JSON 형식으로 데이터를 전송하는 것을 명시
         },
-        body: JSON.stringify({ // 객체를 JSON 문자열로 변환하여 전송
-            no: no,
-            isLate: isLate
-        })
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json(); // JSON 형식으로 응답 데이터를 파싱
-            } else {
-                throw new Error('응답이 실패하였습니다.');
-            }
-        })
-        .then(data => {
-            // 응답에서 받은 시간 데이터를 사용하여 input 태그에 값을 설정
-            const checkInput  = document.querySelector("#checkIn");
-            checkInput.value = data.time; // data.time에 실제 시간 데이터가 들어가야 합니다.
-            console.log(checkInput.value)
+        eventClick: function (info){
+            console.log(info)
+            openCalendarEventModal(info.event._def.extendedProps.eventId);
+        }
+    });
 
-            // 여기에 다른 원하는 작업을 수행할 수 있습니다.
-
-            // 예: 알림 메시지 표시
-            alert('출근되었습니다.');
-            // 예: 페이지 새로고침
-            // window.location.reload();
-        })
-        .catch(error => {
-            console.error('에러 발생:', error);
-        });
+    calendar.render();
 });
